@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: License check
+        run: |
+          if [ -f "LICENSE" ]; then
+            echo "[OK] LICENSE present"
+          else
+            echo "[NO] LICENSE missing" && exit 1
+          fi
+
+      - name: README check
+        run: |
+          if [ -f "README.md" ] || [ -f "README_zh.md" ]; then
+            echo "[OK] README present"
+          else
+            echo "[WARN] README missing"
+          fi
+
+      - name: NOTICE check
+        run: |
+          if [ -f "NOTICE" ]; then
+            echo "[OK] NOTICE present"
+          else
+            echo "[WARN] NOTICE missing"
+          fi
+
+      - name: Python syntax check
+        run: |
+          find . -name "*.py" -not -path "./build/*" -not -path "./.venv/*" | while read f; do
+            python -m py_compile "$f" && echo "[OK] $f" || echo "[NO] $f syntax error"
+          done
