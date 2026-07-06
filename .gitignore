@@ -1,0 +1,75 @@
+# =============================================================================
+# Airymax Ecosystem Module — .gitignore
+# =============================================================================
+
+# Python 缓存
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# 虚拟环境
+venv/
+env/
+ENV/
+.venv/
+.python-version
+
+# 包管理产物
+*.egg-info/
+*.egg
+*.dist-info/
+dist/
+build/
+wheels/
+*.whl
+
+# 测试与覆盖率
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+test-results/
+test_output/
+
+# IDE 配置
+.vscode/
+.idea/
+.vs/
+*.code-workspace
+.cache/
+
+# 构建目录
+build-*/
+cmake-build-*/
+out/
+
+# 环境与密钥
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets.json
+
+# 操作系统
+.DS_Store
+Thumbs.db
+
+# 编辑器临时文件
+*.swp
+*.swo
+*~
+
+# 日志与临时文件
+*.log
+*.tmp
+*.bak
+tmp/
+temp/
