@@ -9,28 +9,17 @@
 [![License](https://img.shields.io/badge/license-AGPL--3.0+Apache--2.0-4a90d9)](LICENSE)
 [![Branch](https://img.shields.io/badge/branch-feature%2Fofficial--hubs--01-6f7b8e)](https://atomgit.com/openairymax/skills)
 
+**仓库:** `git@atomgit.com:openairymax/skills.git` · **分支:** `feature/official-hubs-01`
+
 ---
 
-## 模块定位
+## 概述
 
-`ecosystem/skills/` 是 Airymax AI Agent 运行时平台的**官方技能定义与实现库**。Airymax 中的 *技能*（skill）是一种可复用、自包含的能力，封装了提示词模板、输入 / 输出 schema 与执行入口，任何 Agent 都可按需激活。
+`ecosystem/skills/` 是 Airymax AI Agent 运行时平台的**官方技能定义与实现库**。Airymax 中的 *技能*（skill）是一种可复用、自包含的能力，封装了提示词模板、输入 / 输出 schema 与执行入口，任何 Agent 都可按需激活。本仓中每个技能都继承自 `SkillPlugin` 基类（定义于 `sdk-python/agentos/plugin_types.py`），并实现两个契约：`get_definition()` → 返回 `SkillDefinition`（名称、版本、类别、标签、输入 / 输出 JSON Schema）；`execute(parameters)` → 对校验通过的输入执行技能，返回结构化结果。
 
-本仓中每个技能都继承自 `SkillPlugin` 基类（定义于 `sdk-python/agentos/plugin_types.py`），并实现两个契约：
+本仓提供 5 个官方技能，覆盖 5 大类别（development、text-processing、security、analytics、information），同时提供面向人类的技能文档（`definitions/*.md`）与可执行实现（`src/*.py`），二者保持同步，确保每个技能的契约只有单一真相源。每个实现声明 `PLUGIN_TYPE = "skill"`，可选地暴露 `get_prompt_template()` / `get_system_instructions()` 供提示词驱动型技能使用，并产出对应 `definitions/*.md` 中所文档化的结构化输出。
 
-- `get_definition()` → 返回 `SkillDefinition`（名称、版本、类别、标签、输入 / 输出 JSON Schema）
-- `execute(parameters)` → 对校验通过的输入执行技能，返回结构化结果
-
-本仓同时提供面向人类的技能文档（`definitions/*.md`）与可执行实现（`src/*.py`），二者保持同步，确保每个技能的契约只有单一真相源。
-
-## 技能列表
-
-| 技能 | 类别 | 版本 | 说明 |
-|------|------|:----:|------|
-| [`code_review`](definitions/code_review.md) | development | 1.0.0 | 多维度代码审查：安全漏洞、性能问题、最佳实践偏差 |
-| [`text_summarization`](definitions/text_summarization.md) | text-processing | 1.0.0 | 长文本智能摘要：提取式、抽象式、要点式、精简式 |
-| [`security_audit`](definitions/security_audit.md) | security | 1.0.0 | 系统安全审计：配置、依赖、权限、网络、合规 |
-| [`data_analysis`](definitions/data_analysis.md) | analytics | 1.0.0 | 对结构化 / 半结构化数据执行统计分析，生成洞察报告 |
-| [`web_search`](definitions/web_search.md) | information | 1.0.0 | 多引擎网络搜索，含去重、相关性排序与摘要提取 |
+在生态层中，`skills/` 是自包含模块，**唯一的一方上游依赖是 Airymax SDK**（`agentos.plugin_types`）。它有意避免对 `ecosystem/prompts` 或 `ecosystem/manager` 的硬运行时依赖，可被任意兼容 AgentRT 的运行时加载。下游被 Agent 应用（在 `agent.yaml` / `config.yaml` 中注册技能）、OpenLab（`contrib/skills/` 扩展并与这些官方技能互操作）、示例（`code-review-agent` 消费 `CodeReviewSkill`）以及插件市场（通过 `openlab/markets/skills/` 中定义的契约分发技能）消费。
 
 ## 目录结构
 
@@ -59,29 +48,36 @@ skills/
 └── README.md                          # 本文件
 ```
 
-## 架构
+## 核心组件 — 技能列表
+
+| 技能 | 类别 | 版本 | 说明 |
+|------|------|:----:|------|
+| [`code_review`](definitions/code_review.md) | development | 1.0.0 | 多维度代码审查：安全漏洞、性能问题、最佳实践偏差 |
+| [`text_summarization`](definitions/text_summarization.md) | text-processing | 1.0.0 | 长文本智能摘要：提取式、抽象式、要点式、精简式 |
+| [`security_audit`](definitions/security_audit.md) | security | 1.0.0 | 系统安全审计：配置、依赖、权限、网络、合规 |
+| [`data_analysis`](definitions/data_analysis.md) | analytics | 1.0.0 | 对结构化 / 半结构化数据执行统计分析，生成洞察报告 |
+| [`web_search`](definitions/web_search.md) | information | 1.0.0 | 多引擎网络搜索，含去重、相关性排序与摘要提取 |
+
+### 架构
 
 所有技能继承自 `SkillPlugin` 基类，共享统一的生命周期：
 
 ```
 SkillPlugin  (定义于 sdk-python/agentos/plugin_types.py)
-├── CodeReviewSkill          # development    — 代码审查
+├── CodeReviewSkill          # development     — 代码审查
 ├── TextSummarizationSkill   # text-processing — 文本摘要
-├── SecurityAuditSkill       # security       — 安全审计
-├── DataAnalysisSkill        # analytics      — 数据分析
-└── WebSearchSkill           # information    — 网络搜索
+├── SecurityAuditSkill       # security        — 安全审计
+├── DataAnalysisSkill        # analytics       — 数据分析
+└── WebSearchSkill           # information     — 网络搜索
 ```
 
 每个技能实现：
-
 1. 声明 `PLUGIN_TYPE = "skill"`。
 2. 通过 `get_definition()` 返回 `SkillDefinition` — 含用于输入校验的 JSON Schema。
 3. 可选地暴露 `get_prompt_template()` 与 `get_system_instructions()` 供提示词驱动型技能使用。
-4. 实现 `execute(parameters)`，产出对应 `definitions/*.md` 中所文档化的结构化输出。
+4. 实现 `async execute(context)`，产出对应 `definitions/*.md` 中所文档化的结构化输出。
 
-## 上游 / 下游依赖关系
-
-### 上游
+## 上游依赖
 
 `skills/` 仅以 Airymax SDK 作为唯一的一方依赖。`SkillPlugin` 基类与 `SkillDefinition` dataclass 定义于 SDK 中，运行时导入：
 
@@ -93,7 +89,7 @@ SkillPlugin  (定义于 sdk-python/agentos/plugin_types.py)
 
 技能有意避免对 `ecosystem/prompts` 或 `ecosystem/manager` 的硬运行时依赖 — 它们是自包含模块，可被任意兼容 AgentRT 的运行时加载。
 
-### 下游
+## 下游消费方
 
 | 消费方 | 使用方式 |
 |--------|----------|
@@ -103,7 +99,7 @@ SkillPlugin  (定义于 sdk-python/agentos/plugin_types.py)
 | **插件市场** | 技能通过 `openlab/markets/skills/` 中定义的市场契约注册并分发 |
 | **Agent 开发者** | 参照本仓的模式子类化 `SkillPlugin` 以构建自定义技能 |
 
-## 使用说明
+## 使用说明 / 快速开始
 
 ### 导入并执行技能
 
@@ -143,20 +139,28 @@ skills:
   - ecosystem.skills:DataAnalysisSkill
 ```
 
-### 运行测试套件
-
-```bash
-python -m pytest tests/ -v
-```
-
-## 开发新技能
+### 开发新技能
 
 1. 子类化 `SkillPlugin`（来自 `agentos.plugin_types`）。
 2. 实现 `get_definition()` → 返回含名称、版本、类别、标签与输入 / 输出 JSON Schema 的 `SkillDefinition`。
-3. 实现 `execute(parameters)` → 返回结构化结果。
+3. 实现 `async execute(context)` → 返回结构化结果。
 4. 编写配套的 `definitions/<skill_name>.md` 文档，使面向人类的规格与实现保持同步。
 5. 在 `tests/test_skills.py` 下添加单元测试。
 6. 在 `__init__.py` 中导出新技能。
+
+## 构建
+
+`skills/` 是纯 Python 包，无编译产物。安装 SDK 依赖并运行测试套件：
+
+```bash
+# 安装 Airymax SDK（提供 agentos.plugin_types）
+pip install agentrt
+
+# 运行技能单元测试（全部 5 个技能）
+python -m pytest tests/ -v
+```
+
+CI 定义在 `.github/workflows/ci.yml`，每次推送时运行单元测试。
 
 ## 分支策略
 
@@ -166,4 +170,4 @@ python -m pytest tests/ -v
 
 采用 **AGPL v3 + Apache 2.0** 双许可证（SPDX: `AGPL-3.0-or-later OR Apache-2.0`）。详见 [LICENSE](LICENSE)。
 
-Copyright (c) 2025-2026 **SPHARX Ltd.** All Rights Reserved.
+Copyright (c) 2025-2026 SPHARX Ltd. All Rights Reserved.
