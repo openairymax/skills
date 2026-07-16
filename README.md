@@ -15,11 +15,11 @@
 
 ## Overview
 
-`ecosystem/skills/` is the **official skill definition and implementation library** of the Airymax AI Agent Runtime Platform. A *skill* in Airymax is a reusable, self-contained capability that packages a prompt template, an input/output schema and an execution entry point so that any agent can activate it on demand. Every skill in this repository inherits from the `SkillPlugin` base class (defined in `sdk-python/agentos/plugin_types.py`) and implements two contracts: `get_definition()` → returns a `SkillDefinition` (name, version, category, tags, input/output JSON Schema), and `execute(parameters)` → runs the skill against validated input and returns a structured result.
+`ecosystem/skills/` is the **official skill definition and implementation library** of the Airymax AI Agent Runtime Platform. A *skill* in Airymax is a reusable, self-contained capability that packages a prompt template, an input/output schema and an execution entry point so that any agent can activate it on demand. Every skill in this repository inherits from the `SkillPlugin` base class (defined in `sdk-python/agentrt/plugin_types.py`) and implements two contracts: `get_definition()` → returns a `SkillDefinition` (name, version, category, tags, input/output JSON Schema), and `execute(parameters)` → runs the skill against validated input and returns a structured result.
 
 The repository ships 5 official skills across 5 categories (development, text-processing, security, analytics, information), providing both the human-facing skill documentation (`definitions/*.md`) and the executable implementations (`src/*.py`), kept in lockstep so that a single source of truth describes each skill's contract. Each implementation declares `PLUGIN_TYPE = "skill"`, optionally exposes `get_prompt_template()` / `get_system_instructions()` for prompt-driven skills, and produces the structured output documented in its matching `definitions/*.md`.
 
-Within the ecosystem layer, `skills/` is a self-contained module whose **only first-party upstream dependency is the Airymax SDK** (`agentos.plugin_types`). It intentionally avoids hard runtime dependencies on `ecosystem/prompts` or `ecosystem/manager` so it can be loaded by any AgentRT-compatible runtime. Downstream it is consumed by agent applications (which register skills in `agent.yaml` / `config.yaml`), OpenLab (`contrib/skills/` extends and interoperates with these official skills), the examples (`code-review-agent` consumes `CodeReviewSkill`), and the plugin marketplace (which distributes skills through the contract defined in `openlab/markets/skills/`).
+Within the ecosystem layer, `skills/` is a self-contained module whose **only first-party upstream dependency is the Airymax SDK** (`agentrt.plugin_types`). It intentionally avoids hard runtime dependencies on `ecosystem/prompts` or `ecosystem/manager` so it can be loaded by any AgentRT-compatible runtime. Downstream it is consumed by agent applications (which register skills in `agent.yaml` / `config.yaml`), OpenLab (`contrib/skills/` extends and interoperates with these official skills), the examples (`code-review-agent` consumes `CodeReviewSkill`), and the plugin marketplace (which distributes skills through the contract defined in `openlab/markets/skills/`).
 
 ## Directory Structure
 
@@ -63,7 +63,7 @@ skills/
 All skills inherit from the `SkillPlugin` base class and share a uniform lifecycle:
 
 ```
-SkillPlugin  (defined in sdk-python/agentos/plugin_types.py)
+SkillPlugin  (defined in sdk-python/agentrt/plugin_types.py)
 ├── CodeReviewSkill          # development     — code review
 ├── TextSummarizationSkill   # text-processing — summarization
 ├── SecurityAuditSkill       # security        — security audit
@@ -83,7 +83,7 @@ Each skill implementation:
 
 | Dependency | Purpose |
 |------------|---------|
-| `sdk-python` (`agentos.plugin_types`) | Provides `SkillPlugin`, `SkillDefinition` — the base class every skill inherits from |
+| `sdk-python` (`agentrt.plugin_types`) | Provides `SkillPlugin`, `SkillDefinition` — the base class every skill inherits from |
 | AgentRT runtime | Hosts the plugin loader that discovers and instantiates skills; provides the execution context |
 | Python ≥ 3.10 | Runtime for skill implementations (uses `asyncio`, standard library only) |
 
@@ -141,7 +141,7 @@ skills:
 
 ### Developing a new skill
 
-1. Subclass `SkillPlugin` (from `agentos.plugin_types`).
+1. Subclass `SkillPlugin` (from `agentrt.plugin_types`).
 2. Implement `get_definition()` → return a `SkillDefinition` with name, version, category, tags and input/output JSON Schema.
 3. Implement `async execute(context)` → return the structured result.
 4. Author a matching `definitions/<skill_name>.md` document so the human-facing spec stays in sync with the implementation.
@@ -153,7 +153,7 @@ skills:
 `skills/` is a pure Python package with no compiled artifact. Install the SDK dependency and run the test suite:
 
 ```bash
-# Install the Airymax SDK (provides agentos.plugin_types)
+# Install the Airymax SDK (provides agentrt.plugin_types)
 pip install agentrt
 
 # Run the skill unit tests (all 5 skills)
