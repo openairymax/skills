@@ -1,6 +1,6 @@
 # Database Skill — 数据库操作技能
 
-**模块路径**: `ecosystem/openlab/contrib/skills/database_skill/`
+**模块路径**: `ecosystem/skills/contrib/database_skill/`
 **版本**: v0.1.1
 
 > **Status**: 本模块作为 AgentRT 的正式组成部分，API 持续演进中。本模块通过 JSON-RPC 2.0 协议与 AgentRT 核心运行时集成。

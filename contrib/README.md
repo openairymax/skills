@@ -1,6 +1,6 @@
 # Skills — 可复用技能模块
 
-**模块路径**: `ecosystem/openlab/contrib/skills/`
+**模块路径**: `ecosystem/skills/contrib/`
 **版本**: v0.1.1
 
 > **Status**: 本模块作为 AgentRT 的正式组成部分，API 持续演进中。本模块通过 JSON-RPC 2.0 协议与 AgentRT 核心运行时集成。
@@ -12,7 +12,7 @@ Skills 是 OpenLab 社区贡献的可复用技能模块集合，为 Agent 提供
 ## 目录结构
 
 ```
-skills/
+contrib/
 ├── browser_skill/                  # 浏览器自动化技能（规范定义阶段）
 │   └── README.md
 ├── database_skill/                 # 数据库操作技能（规范定义阶段）
