@@ -1,0 +1,14 @@
+# code_review 技能插件清单（plugin_discovery 解析）
+name: code_review
+version: 1.0.0
+author: SPHARX
+description: Multi-dimensional static code review: security pattern scanning, line-level analysis and severity scoring
+type: tool_provider
+api_version: 1
+min_airy_version: 1
+library: libairy_skill_code_review.so
+permissions:
+  - file_read
+  - log_write
+config:
+  timeout_ms: 5000

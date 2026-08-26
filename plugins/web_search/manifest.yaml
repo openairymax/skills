@@ -1,0 +1,14 @@
+# web_search 技能插件清单（plugin_discovery 解析）
+name: web_search
+version: 1.0.0
+author: SPHARX
+description: Web search fallback provider: search engine link generation, URL normalization, keyword-based relevance ranking
+type: tool_provider
+api_version: 1
+min_airy_version: 1
+library: libairy_skill_web_search.so
+permissions:
+  - file_read
+  - log_write
+config:
+  timeout_ms: 5000

@@ -1,0 +1,14 @@
+# security_audit 技能插件清单（plugin_discovery 解析）
+name: security_audit
+version: 1.0.0
+author: SPHARX
+description: Security audit of configs, code and dependencies: pattern scanning, known-CVE mapping and risk scoring
+type: tool_provider
+api_version: 1
+min_airy_version: 1
+library: libairy_skill_security_audit.so
+permissions:
+  - file_read
+  - log_write
+config:
+  timeout_ms: 5000

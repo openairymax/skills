@@ -1,0 +1,14 @@
+# data_analysis 技能插件清单（plugin_discovery 解析）
+name: data_analysis
+version: 1.0.0
+author: SPHARX
+description: Statistical analysis for structured data: descriptive statistics, IQR/Z-score outlier detection and linear trend regression
+type: tool_provider
+api_version: 1
+min_airy_version: 1
+library: libairy_skill_data_analysis.so
+permissions:
+  - file_read
+  - log_write
+config:
+  timeout_ms: 5000

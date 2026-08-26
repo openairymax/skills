@@ -1,0 +1,14 @@
+# text_summarization 技能插件清单（plugin_discovery 解析）
+name: text_summarization
+version: 1.0.0
+author: SPHARX
+description: Extractive text summarization: TF keyword extraction, key sentence scoring and compression ratio statistics
+type: tool_provider
+api_version: 1
+min_airy_version: 1
+library: libairy_skill_text_summarization.so
+permissions:
+  - file_read
+  - log_write
+config:
+  timeout_ms: 5000
