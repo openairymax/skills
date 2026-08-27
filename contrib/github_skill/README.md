@@ -91,7 +91,7 @@ github_skill/
 
 ## 依赖关系
 
-- **核心依赖**: AgentRT OpenLab Core, PyGithub >= 1.59.0, requests >= 2.31.0
+- **核心依赖**: AgentRT orchestration Core, PyGithub >= 1.59.0, requests >= 2.31.0
 - **安装**: 已包含在核心依赖中
 
 ## 安全说明

@@ -60,7 +60,7 @@ browser_skill/
 
 ## 依赖关系
 
-- **核心依赖**: AgentRT OpenLab Core
+- **核心依赖**: AgentRT orchestration Core
 - **浏览器驱动**: Playwright >= 1.40.0 或 Selenium >= 4.15.0
 - **安装**: `pip install -e ".[browser]"`
 

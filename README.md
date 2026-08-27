@@ -19,26 +19,39 @@
 
 The repository ships 5 official skills across 5 categories (development, text-processing, security, analytics, information), providing both the human-facing skill documentation (`definitions/*.md`) and the executable implementations (`src/*.py`), kept in lockstep so that a single source of truth describes each skill's contract. Each implementation declares `PLUGIN_TYPE = "skill"`, optionally exposes `get_prompt_template()` / `get_system_instructions()` for prompt-driven skills, and produces the structured output documented in its matching `definitions/*.md`.
 
-Within the ecosystem layer, `skills/` is a self-contained module whose **only first-party upstream dependency is the Airymax SDK** (`agentrt.plugin_types`). It intentionally avoids hard runtime dependencies on `ecosystem/prompts` or `ecosystem/manager` so it can be loaded by any AgentRT-compatible runtime. Downstream it is consumed by agent applications (which register skills in `agent.yaml` / `config.yaml`), OpenLab (`contrib/skills/` extends and interoperates with these official skills), the examples (`code-review-agent` consumes `CodeReviewSkill`), and the plugin marketplace (which distributes skills through the contract defined in `openlab/markets/skills/`).
+Within the ecosystem layer, `skills/` is a self-contained module whose **only first-party upstream dependency is the Airymax SDK** (`agentrt.plugin_types`). It intentionally avoids hard runtime dependencies on `ecosystem/prompts` or `ecosystem/manager` so it can be loaded by any AgentRT-compatible runtime. Downstream it is consumed by agent applications (which register skills in `agent.yaml` / `config.yaml`), the marketplace examples (e.g. `code-review-agent` in `ecosystem/markets/examples`), and the plugin marketplace `ecosystem/markets` (which distributes skills).
 
 ## Directory Structure
 
 ```
 skills/
 ├── __init__.py                        # Package entry — exports official skills
-├── definitions/                       # Human-facing skill documentation (Markdown)
+├── definitions/                       # Human-facing skill documentation (Markdown) — 契约 SSoT
 │   ├── code_review.md                 # Code review skill spec
 │   ├── text_summarization.md          # Text summarization skill spec
 │   ├── security_audit.md              # Security audit skill spec
 │   ├── data_analysis.md               # Data analysis skill spec
 │   └── web_search.md                  # Web search skill spec
-├── src/                               # SkillPlugin implementations
+├── src/                               # SkillPlugin implementations (Python, SDK 加载)
 │   ├── __init__.py
 │   ├── code_review.py                 # CodeReviewSkill
 │   ├── text_summarization.py          # TextSummarizationSkill
 │   ├── security_audit.py              # SecurityAuditSkill
 │   ├── data_analysis.py               # DataAnalysisSkill
 │   └── web_search.py                  # WebSearchSkill
+├── plugins/                           # C 语言本地实现（plugin_d 加载，与 src/ 并存）
+│   ├── CMakeLists.txt                 # 统一构建（产出 libairy_skill_<name>.so）
+│   ├── README.md
+│   ├── code_review/                   # 代码审查插件（manifest.yaml + src/）
+│   ├── data_analysis/
+│   ├── security_audit/
+│   ├── text_summarization/
+│   └── web_search/
+├── contrib/                           # 规范定义阶段的技能（仅 README，尚无实现）
+│   ├── README.md
+│   ├── browser_skill/
+│   ├── database_skill/
+│   └── github_skill/
 ├── tests/
 │   ├── __init__.py
 │   └── test_skills.py                 # Unit tests for all 5 skills
@@ -94,9 +107,9 @@ The skills intentionally avoid hard runtime dependencies on `ecosystem/prompts` 
 | Consumer | How it uses `skills/` |
 |----------|------------------------|
 | **Agent applications** | Import skills via `from ecosystem.skills import CodeReviewSkill, ...` and register them in `agent.yaml` / `config.yaml` under `skills:` |
-| **OpenLab (`ecosystem/openlab`)** | `contrib/skills/` extends and interoperates with the official skills defined here |
-| **Examples (`ecosystem/examples`)** | `code-review-agent` and similar examples consume the official `CodeReviewSkill` |
-| **Plugin marketplace** | Skills are registered and distributed through the marketplace contract defined in `openlab/markets/skills/` |
+| **Orchestration (`ecosystem/agents/orchestration`)** | Interoperates with the official skills through its tool bridge |
+| **Marketplace examples (`ecosystem/markets/examples`)** | `code-review-agent` and similar examples consume the official `CodeReviewSkill` |
+| **Plugin marketplace (`ecosystem/markets`)** | Skills are registered and distributed through the marketplace contract defined in `ecosystem/markets` |
 | **Agent developers** | Subclass `SkillPlugin` following the patterns in this repository to build custom skills |
 
 ## Usage / Quick Start

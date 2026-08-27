@@ -60,7 +60,7 @@ database_skill/
 
 ## 依赖关系
 
-- **核心依赖**: AgentRT OpenLab Core, SQLAlchemy
+- **核心依赖**: AgentRT orchestration Core, SQLAlchemy
 - **数据库驱动**: psycopg2 (PostgreSQL), pymysql (MySQL), sqlite3 (SQLite, 内置)
 - **安装**: `pip install -e ".[ecommerce]"`
 

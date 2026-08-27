@@ -7,7 +7,7 @@
 
 ## 概述
 
-Skills 是 OpenLab 社区贡献的可复用技能模块集合，为 Agent 提供特定领域的操作能力。每个 Skill 独立封装，提供标准化的接口和配置，可被多个 Agent 复用和组合。当前包含三大技能：Browser Skill（浏览器自动化）、Database Skill（数据库操作）和 GitHub Skill（GitHub 平台集成），覆盖 Web 自动化、数据管理和代码协作三大核心场景。
+Skills 是 Airymax 社区贡献的可复用技能模块集合，为 Agent 提供特定领域的操作能力。每个 Skill 独立封装，提供标准化的接口和配置，可被多个 Agent 复用和组合。当前包含三大技能：Browser Skill（浏览器自动化）、Database Skill（数据库操作）和 GitHub Skill（GitHub 平台集成），覆盖 Web 自动化、数据管理和代码协作三大核心场景。
 
 ## 目录结构
 
@@ -58,9 +58,9 @@ class Skill:
 
 | Skill | 核心依赖 | 可选依赖 |
 |-------|----------|----------|
-| Browser Skill | AgentRT OpenLab Core | Playwright >= 1.40.0 或 Selenium >= 4.15.0 |
-| Database Skill | AgentRT OpenLab Core, SQLAlchemy | psycopg2 (PostgreSQL), pymysql (MySQL) |
-| GitHub Skill | AgentRT OpenLab Core, PyGithub >= 1.59.0, requests >= 2.31.0 | — |
+| Browser Skill | AgentRT orchestration Core | Playwright >= 1.40.0 或 Selenium >= 4.15.0 |
+| Database Skill | AgentRT orchestration Core, SQLAlchemy | psycopg2 (PostgreSQL), pymysql (MySQL) |
+| GitHub Skill | AgentRT orchestration Core, PyGithub >= 1.59.0, requests >= 2.31.0 | — |
 
 - **Python**: >= 3.10
 - **协议依赖**: AgentRT protocols 层（JSON-RPC 2.0）

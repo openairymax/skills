@@ -19,7 +19,7 @@
 
 本仓提供 5 个官方技能，覆盖 5 大类别（development、text-processing、security、analytics、information），同时提供面向人类的技能文档（`definitions/*.md`）与可执行实现（`src/*.py`），二者保持同步，确保每个技能的契约只有单一真相源。每个实现声明 `PLUGIN_TYPE = "skill"`，可选地暴露 `get_prompt_template()` / `get_system_instructions()` 供提示词驱动型技能使用，并产出对应 `definitions/*.md` 中所文档化的结构化输出。
 
-在生态层中，`skills/` 是自包含模块，**唯一的一方上游依赖是 Airymax SDK**（`agentrt.plugin_types`）。它有意避免对 `ecosystem/prompts` 或 `ecosystem/manager` 的硬运行时依赖，可被任意兼容 AgentRT 的运行时加载。下游被 Agent 应用（在 `agent.yaml` / `config.yaml` 中注册技能）、OpenLab（`contrib/skills/` 扩展并与这些官方技能互操作）、示例（`code-review-agent` 消费 `CodeReviewSkill`）以及插件市场（通过 `openlab/markets/skills/` 中定义的契约分发技能）消费。
+在生态层中，`skills/` 是自包含模块，**唯一的一方上游依赖是 Airymax SDK**（`agentrt.plugin_types`）。它有意避免对 `ecosystem/prompts` 或 `ecosystem/manager` 的硬运行时依赖，可被任意兼容 AgentRT 的运行时加载。下游被 Agent 应用（在 `agent.yaml` / `config.yaml` 中注册技能）、编排内核（`ecosystem/agents/orchestration`）、市场示例（`ecosystem/markets/examples`）以及插件市场（`ecosystem/markets`）消费。
 
 ## 目录结构
 
@@ -94,9 +94,9 @@ SkillPlugin  (定义于 sdk-python/agentrt/plugin_types.py)
 | 消费方 | 使用方式 |
 |--------|----------|
 | **Agent 应用** | 通过 `from ecosystem.skills import CodeReviewSkill, ...` 导入技能，并在 `agent.yaml` / `config.yaml` 的 `skills:` 节注册 |
-| **OpenLab（`ecosystem/openlab`）** | `contrib/skills/` 扩展并与本仓定义的官方技能互操作 |
-| **示例（`ecosystem/examples`）** | `code-review-agent` 等示例消费官方 `CodeReviewSkill` |
-| **插件市场** | 技能通过 `openlab/markets/skills/` 中定义的市场契约注册并分发 |
+| **编排内核（`ecosystem/agents/orchestration`）** | 经其工具桥与官方技能互操作 |
+| **市场示例（`ecosystem/markets/examples`）** | `code-review-agent` 等示例消费官方 `CodeReviewSkill` |
+| **插件市场（`ecosystem/markets`）** | 技能通过 `ecosystem/markets` 的市场契约注册并分发 |
 | **Agent 开发者** | 参照本仓的模式子类化 `SkillPlugin` 以构建自定义技能 |
 
 ## 使用说明 / 快速开始
