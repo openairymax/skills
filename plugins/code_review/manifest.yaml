@@ -2,7 +2,7 @@
 name: code_review
 version: 1.0.0
 author: SPHARX
-description: Multi-dimensional static code review: security pattern scanning, line-level analysis and severity scoring
+description: "Multi-dimensional static code review: security pattern scanning, line-level analysis and severity scoring"
 type: tool_provider
 api_version: 1
 min_airy_version: 1

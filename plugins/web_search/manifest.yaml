@@ -2,7 +2,7 @@
 name: web_search
 version: 1.0.0
 author: SPHARX
-description: Web search fallback provider: search engine link generation, URL normalization, keyword-based relevance ranking
+description: "Web search fallback provider: search engine link generation, URL normalization, keyword-based relevance ranking"
 type: tool_provider
 api_version: 1
 min_airy_version: 1
