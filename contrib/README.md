@@ -1,13 +1,18 @@
-# Skills — 可复用技能模块
+# Skills — 社区实验区（非官方契约）
 
 **模块路径**: `ecosystem/skills/contrib/`
 **版本**: v0.1.1
 
-> **Status**: 本模块作为 AgentRT 的正式组成部分，API 持续演进中。本模块通过 JSON-RPC 2.0 协议与 AgentRT 核心运行时集成。
+> **Status（0.1.6 生态 SSoT 收敛 S-5）**: 本目录为**社区实验区**，非 AgentRT
+> 官方技能契约的一部分。官方技能契约唯一权威 = `ecosystem/skills/definitions/*.md`
+> + `plugins/*/manifest.yaml`（SkillPlugin 契约：`get_definition()` + `execute()`）。
+> 本目录内技能处于**规范定义阶段**，仅含 README 无实现、无契约文件；其描述的
+> `initialize()/execute()` 接口与官方 SkillPlugin 契约不同，**不承诺兼容、不参与
+> 发布链路**。社区贡献者若需正式发布技能，请按官方 `plugins/` 目录规范实现。
 
 ## 概述
 
-Skills 是 Airymax 社区贡献的可复用技能模块集合，为 Agent 提供特定领域的操作能力。每个 Skill 独立封装，提供标准化的接口和配置，可被多个 Agent 复用和组合。当前包含三大技能：Browser Skill（浏览器自动化）、Database Skill（数据库操作）和 GitHub Skill（GitHub 平台集成），覆盖 Web 自动化、数据管理和代码协作三大核心场景。
+Skills 是 Airymax 社区贡献的可复用技能模块集合，为 Agent 提供特定领域的操作能力。当前包含三大技能：Browser Skill（浏览器自动化）、Database Skill（数据库操作）和 GitHub Skill（GitHub 平台集成），均处于规范定义阶段。
 
 ## 目录结构
 
