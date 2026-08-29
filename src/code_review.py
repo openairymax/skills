@@ -15,7 +15,7 @@ from pathlib import Path as _Path
 
 # 确保 agentrt 包可导入（开发模式：sdk/sdk-python，历史 sdk/python 已迁移）
 _sdk_python = _Path(__file__).resolve().parents[3] / "sdk" / "sdk-python"
-if str(_sdk_python) not in _sys.path:
+if str(_sdk_python) not in _sys.path and _sdk_python.is_dir():
     _sys.path.insert(0, str(_sdk_python))
 
 from agentrt.plugin_types import (

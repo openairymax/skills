@@ -18,9 +18,29 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-# 插件 ABI 头文件目录（plugin_d 提供 plugin_service.h / plugin_discovery.h）
-set(PLUGIN_D_INCLUDE_DIR
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../../agentrt/daemons/plugin_d/include)
+# 插件 ABI 头文件（plugin_d 提供 plugin_service.h / plugin_discovery.h）。
+# 0.1.6 P2-1 独立组装修复：头文件仅编译期依赖，经 find_path 柔性探测——
+#   1) 显式 -DPLUGIN_D_INCLUDE_DIR=<path>（独立部署指向已发布/已安装的
+#      plugin_d 头目录）；
+#   2) 回退伞仓相对路径（agentrt 在目录树内，开发期）；
+#   3) 都不可得 → WARN + 跳过 C 插件编译，不阻断 ecosystem 独立组装
+#      （Python 技能不受影响；C 插件由 plugin_d 运行时按需加载）。
+set(PLUGIN_D_INCLUDE_DIR "" CACHE PATH "plugin_d ABI 头文件目录（agentrt）")
+if(NOT PLUGIN_D_INCLUDE_DIR)
+    set(PLUGIN_D_INCLUDE_DIR
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../../agentrt/daemons/plugin_d/include)
+endif()
+
+find_path(PLUGIN_D_FOUND_DIR plugin_service.h
+    PATHS ${PLUGIN_D_INCLUDE_DIR}
+    NO_DEFAULT_PATH)
+
+if(NOT PLUGIN_D_FOUND_DIR)
+    message(WARNING
+        "plugin_d ABI 头文件未找到（agentrt 不在当前目录树）：跳过 C 技能插件编译。"
+        "独立部署请在 cmake 时指定 -DPLUGIN_D_INCLUDE_DIR=<path>")
+    return()
+endif()
 
 find_library(CJSON_LIBRARY NAMES cjson)
 
