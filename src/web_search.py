@@ -14,11 +14,14 @@ from urllib.parse import quote_plus, urljoin
 import sys as _sys
 from pathlib import Path as _Path
 
-# 确保 agentrt 包可导入（0.1.6 P2-1 独立组装修复：仓库内 sdk/ 目录存在
-# 时才注入开发路径；独立 clone 组装时走已安装的 agentrt 包）
-_sdk_python = _Path(__file__).resolve().parents[3] / "sdk" / "sdk-python"
-if str(_sdk_python) not in _sys.path and _sdk_python.is_dir():
-    _sys.path.insert(0, str(_sdk_python))
+# S-6 收敛：优先使用 pip 安装的 agentrt 包；未安装时才从源码树引导
+# sdk/sdk-python（开发模式兜底，历史 sdk/python 已迁移）
+try:
+    import agentrt  # noqa: F401  # 包安装优先，避免源码树硬编码注入
+except ImportError:
+    _sdk_python = _Path(__file__).resolve().parents[3] / "sdk" / "sdk-python"
+    if str(_sdk_python) not in _sys.path and _sdk_python.is_dir():
+        _sys.path.insert(0, str(_sdk_python))
 
 from agentrt.plugin_types import (
     SkillPlugin,
