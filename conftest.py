@@ -8,6 +8,8 @@ ci.yml 的 pytest 步骤）与本地均可用；伞仓组装场景下 ecosystem.
 """
 
 import sys
+# 禁止写入 .pyc 字节码缓存，根治源码区 __pycache__ 污染
+sys.dont_write_bytecode = True
 from pathlib import Path
 
 _SKILLS_ROOT = Path(__file__).resolve().parent

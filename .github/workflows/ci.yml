@@ -57,5 +57,6 @@ jobs:
 
       - name: Run unit tests (0.1.6 S-6)
         run: |
-          python -m pytest tests/ -q
+          # PYTHONPYCACHEPREFIX 重定向 .pyc 到源码区外，根治 __pycache__ 污染
+          PYTHONPYCACHEPREFIX=/tmp/agentrt-pycache python -m pytest tests/ -q
           echo "[OK] skills unit tests passed"
