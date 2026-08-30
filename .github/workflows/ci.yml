@@ -51,3 +51,11 @@ jobs:
           find . -name "*.py" -not -path "./build/*" -not -path "./.venv/*" | while read f; do
             python -m py_compile "$f" && echo "[OK] $f" || echo "[NO] $f syntax error"
           done
+
+      - name: Install pytest
+        run: python -m pip install --quiet pytest
+
+      - name: Run unit tests (0.1.6 S-6)
+        run: |
+          python -m pytest tests/ -q
+          echo "[OK] skills unit tests passed"
