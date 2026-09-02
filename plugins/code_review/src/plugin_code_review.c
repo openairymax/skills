@@ -13,7 +13,7 @@
  *   4. 评分：base=100，critical-25/high-15/medium-8/low-3/info-1，夹到 [0,100]
  *   5. 输出 JSON：summary / overall_score / findings[] / language / lines_reviewed
  *
- * 插件 ABI（遵循 agentrt/daemons/plugin_d 约定，见 plugin_service.h）：
+ * 插件 ABI（遵循 agentrt/daemons/tool_d 插件域约定，见 plugin_service.h）：
  *   - plugin_get_metadata()  （必需）
  *   - plugin_init()          （必需）
  *   - plugin_destroy()       （必需）
@@ -537,7 +537,7 @@ void plugin_destroy(void *user_data)
  *             "lines_reviewed": N}
  *
  * @param[in]  json_input  输入 JSON 字符串
- * @param[out] json_output 输出 JSON 字符串（cJSON malloc，由 plugin_d
+ * @param[out] json_output 输出 JSON 字符串（cJSON malloc，由 tool_d
  *                         通过 AIRY_FREE 释放；POSIX 下即 free）
  * @return 0 成功，非 0 失败
  */

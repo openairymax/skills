@@ -695,7 +695,7 @@ void plugin_destroy(void *user_data)
  *             "outliers": {...}, "trends": {...}, "insights": [...]}
  *
  * @param[in]  json_input  输入 JSON 字符串
- * @param[out] json_output 输出 JSON 字符串（cJSON malloc，由 plugin_d
+ * @param[out] json_output 输出 JSON 字符串（cJSON malloc，由 tool_d
  *                         通过 AIRY_FREE 释放；POSIX 下即 free）
  * @return 0 成功，非 0 失败（输入为空/字段缺失返回 -1）
  */

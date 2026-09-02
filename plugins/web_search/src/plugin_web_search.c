@@ -18,7 +18,7 @@
  *   4. 截断到 max_results（默认 10，clamp 1..50）；query 长度>500 拒绝
  *   5. 输出 JSON：query / results[] / total_found / summary / mode / engine
  *
- * 插件 ABI（遵循 agentrt/daemons/plugin_d 约定，见 plugin_service.h）：
+ * 插件 ABI（遵循 agentrt/daemons/tool_d 插件域约定，见 plugin_service.h）：
  *   - plugin_get_metadata()  （必需）
  *   - plugin_init()          （必需）
  *   - plugin_destroy()       （必需）
@@ -664,7 +664,7 @@ void plugin_destroy(void *user_data)
  *             "summary": "...", "engine": "..."}
  *
  * @param[in]  json_input  输入 JSON 字符串
- * @param[out] json_output 输出 JSON 字符串（cJSON malloc，由 plugin_d
+ * @param[out] json_output 输出 JSON 字符串（cJSON malloc，由 tool_d
  *                         通过 AIRY_FREE 释放；POSIX 下即 free）
  * @return 0 成功，非 0 失败（输入为空/字段缺失返回 -1）
  */

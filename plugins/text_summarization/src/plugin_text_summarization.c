@@ -10,13 +10,13 @@
  *   3. 在摘要预算内贪心选取关键句，输出保持原文顺序
  *   4. 输出 JSON：summary / key_points / top_keywords / 统计指标
  *
- * 插件 ABI（遵循 agentrt/daemons/plugin_d 约定，见 plugin_service.h）：
+ * 插件 ABI（遵循 agentrt/daemons/tool_d 插件域约定，见 plugin_service.h）：
  *   - plugin_get_metadata()  （必需）
  *   - plugin_init()          （必需）
  *   - plugin_destroy()       （必需）
  *   - plugin_start()         （可选：内置样例自检）
  *   - plugin_stop()          （可选）
- *   - plugin_execute()       （扩展入口：JSON 入参 → JSON 出参，plugin_d 的
+ *   - plugin_execute()       （扩展入口：JSON 入参 → JSON 出参，tool_d 的
  *                            plugin.execute RPC 通过 dlsym 调用）
  *
  * @copyright (c) 2026 SPHARX. All Rights Reserved.
@@ -485,7 +485,7 @@ void plugin_destroy(void *user_data)
  *            "top_keywords": [...], "total_characters": N, ...}
  *
  * @param[in]  json_input  输入 JSON 字符串
- * @param[out] json_output 输出 JSON 字符串（cJSON malloc，由 plugin_d
+ * @param[out] json_output 输出 JSON 字符串（cJSON malloc，由 tool_d
  *                         通过 AIRY_FREE 释放；POSIX 下即 free）
  * @return 0 成功，非 0 失败
  */
