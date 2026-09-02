@@ -39,7 +39,7 @@ skills/
 │   ├── security_audit.py              # SecurityAuditSkill
 │   ├── data_analysis.py               # DataAnalysisSkill
 │   └── web_search.py                  # WebSearchSkill
-├── plugins/                           # C 语言本地实现（plugin_d 加载，与 src/ 并存）
+├── plugins/                           # C 语言本地实现（tool_d 加载，与 src/ 并存）
 │   ├── CMakeLists.txt                 # 统一构建（产出 libairy_skill_<name>.so）
 │   ├── README.md
 │   ├── code_review/                   # 代码审查插件（manifest.yaml + src/）

@@ -5,7 +5,8 @@
 ## 定位
 
 `plugins/` 是 5 个官方技能的 **C 语言本地实现**（动态库），经
-`plugin_d`（AgentRT 运行时 daemon）动态加载。它们与 `src/*.py` 的
+`tool_d`（AgentRT 运行时 daemon；0.1.9 M4 吸收 `plugin_d` 执行域）动态
+加载。它们与 `src/*.py` 的
 Python 实现对应同一组技能契约，提供零解释器开销的本地执行路径，
 供高性能/资源受限场景选用。
 
@@ -32,14 +33,14 @@ cmake -S . -B <build-dir> -DCMAKE_BUILD_TYPE=Release
 cmake --build <build-dir>
 ```
 
-产物 `libairy_skill_<name>.so` 部署到 `plugin_d` 扫描目录
+产物 `libairy_skill_<name>.so` 部署到 `tool_d` 扫描目录
 `$AIRY_HOME/ecosystem/plugins/<name>/`，随 `manifest.yaml` 一起。
 
 ## 插件 ABI
 
-- ABI 头来自 `agentrt/daemons/plugin_d/include`（`plugin_service.h` /
-  `plugin_discovery.h`），仅编译期依赖；
-- 运行期仅依赖系统 `libcjson`（`plugin_d` 链接同一共享库）；
+- ABI 头来自 `agentrt/daemons/tool_d/include`（`plugin_service.h` /
+  `plugin_discovery.h`，M4 随执行域迁入 tool_d），仅编译期依赖；
+- 运行期仅依赖系统 `libcjson`（`tool_d` 链接同一共享库）；
 - 每个插件以 `manifest.yaml` 声明 `type: tool_provider`、权限与超时
   配置，供 `plugin_discovery` 解析。
 
