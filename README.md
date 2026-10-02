@@ -26,6 +26,7 @@ Within the ecosystem layer, `skills/` is a self-contained module whose **only fi
 ```
 skills/
 ├── __init__.py                        # Package entry — exports official skills
+├── conftest.py                        # Test bootstrap (package-chain import discipline)
 ├── definitions/                       # Human-facing skill documentation (Markdown) — 契约 SSoT
 │   ├── code_review.md                 # Code review skill spec
 │   ├── text_summarization.md          # Text summarization skill spec
@@ -55,6 +56,7 @@ skills/
 ├── tests/
 │   ├── __init__.py
 │   └── test_skills.py                 # Unit tests for all 5 skills
+├── pytest.ini                         # Test configuration
 ├── .github/workflows/ci.yml           # CI pipeline
 ├── .gitignore
 ├── .gitkeep
@@ -163,7 +165,10 @@ skills:
 
 ## Build
 
-`skills/` is a pure Python package with no compiled artifact. Install the SDK dependency and run the test suite:
+The official skills' Python implementation is a pure Python package. `plugins/`
+additionally carries C native implementations of the same skill contracts
+(shared libraries dynamically loaded by `tool_d`), which require a separate
+CMake build — see [plugins/README.md](plugins/README.md). Install the SDK dependency and run the test suite:
 
 ```bash
 # Install the Airymax SDK (provides agentrt.plugin_types)

@@ -26,22 +26,28 @@
 ```
 skills/
 ├── __init__.py                        # 包入口 — 导出官方技能
+├── conftest.py                        # 测试引导（包链导入约定）
 ├── definitions/                       # 面向人类的技能文档（Markdown）
 │   ├── code_review.md                 # 代码审查技能规格
 │   ├── text_summarization.md          # 文本摘要技能规格
 │   ├── security_audit.md              # 安全审计技能规格
 │   ├── data_analysis.md               # 数据分析技能规格
 │   └── web_search.md                  # 网络搜索技能规格
-├── src/                               # SkillPlugin 实现
+├── src/                               # SkillPlugin 实现（Python）
 │   ├── __init__.py
 │   ├── code_review.py                 # CodeReviewSkill
 │   ├── text_summarization.py          # TextSummarizationSkill
 │   ├── security_audit.py              # SecurityAuditSkill
 │   ├── data_analysis.py               # DataAnalysisSkill
 │   └── web_search.py                  # WebSearchSkill
+├── plugins/                           # 五技能的 C 本地实现（tool_d 动态加载）
+│   ├── CMakeLists.txt                 # 统一构建，产出 libairy_skill_<name>.so
+│   └── <skill>/                       # manifest.yaml + src/plugin_<skill>.c
+├── contrib/                           # 社区实验区（规范定义阶段，非官方契约）
 ├── tests/
 │   ├── __init__.py
 │   └── test_skills.py                 # 全部 5 个技能的单元测试
+├── pytest.ini                         # 测试配置
 ├── .github/workflows/ci.yml           # CI 流水线
 ├── .gitignore
 ├── .gitkeep
@@ -150,7 +156,9 @@ skills:
 
 ## 构建
 
-`skills/` 是纯 Python 包，无编译产物。安装 SDK 依赖并运行测试套件：
+官方技能的 Python 实现是纯 Python 包；`plugins/` 下另有同一组技能契约的
+C 本地实现（动态库，经 `tool_d` 动态加载），需用 CMake 单独构建，
+详见 [plugins/README.md](plugins/README.md)。安装 SDK 依赖并运行测试套件：
 
 ```bash
 # 安装 Airymax SDK（提供 agentrt.plugin_types）
